@@ -1,0 +1,153 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Memory</title>
+  <link rel="stylesheet" type="text/css" href="stylesheet.css">
+  <link rel="stylesheet prefetch" href="https://maxcdn.bootstrapcdn.com/font-awesome/4.6.1/css/font-awesome.min.css">
+  <link rel="stylesheet prefetch" href="https://fonts.googleapis.com/css?family=Coda">
+</head>
+<body>
+  <div class="board">
+  </div>
+
+  <script>
+  //Assign the deck to a variable.
+const deck = document.querySelector('.board');
+
+//Create an array which holds all the card values.
+const icons = ["fa-bomb","fa-bomb", "fa-trophy", "fa-trophy", "fa-phone",
+"fa-phone", "fa-camera-retro", "fa-camera-retro", "fa-cloud", "fa-cloud", "fa-truck",
+"fa-truck", "fa-beer", "fa-beer", "fa-spinner", "fa-spinner"];
+
+//Loop over the array to create the cards.
+for (const icon of icons) {
+  const newCard = document.createElement("div");
+  newCard.classList.add("card", icon, "fa", "closed", "inGame");
+  deck.appendChild(newCard);
+};
+
+//Shuffle the deck.
+for (let i = deck.children.length; i >= 0; i--) {
+deck.appendChild(deck.children[Math.random() * i | 0]);
+};
+
+let moves = 0;
+const cards = deck.children;
+let picked = [];
+let matches = 0;
+const openCards = document.getElementsByClassName("open");
+
+for (card of cards) {
+    //when you click a card,
+  card.addEventListener("click", function hi(card) {
+      //see if they have made too many moves and game is ovver
+      youLose();
+      //first you check if it's open - if open then close and remove class open, if closed then open and add class open
+      openCard(card);
+      //then you check if 2 cards are open. If only 1 is open, do nothing.
+      if (areTwoOpen() === true) {
+        //if 2 cards are open, check if they match.
+        if (doCardsMatch() === true) {
+          onMatch();
+        } else {
+          notMatch();
+        }
+        endMove();
+        if (isGameOver() === true) {
+          youWin();
+        }
+      }
+    }
+  )
+}
+
+
+function openCard(x) {
+//open a closed card and add to picked array
+  if (x.target.classList.contains("closed")) {
+    x.target.classList.remove("closed");
+    x.target.classList.add("open");
+    picked.push(x.target.classList.value);
+  } else {
+//close an open card and remove from picked array
+    x.target.classList.add("closed");
+    openCardIndex = picked.indexOf(x.target.classList.value);
+    picked.splice(openCardIndex, 1);
+    x.target.classList.remove("open");
+  };
+  };
+
+//check if 2 cards match.
+function areTwoOpen() {
+  if (picked.length === 2) {
+    return true;
+  } else {
+    return false;
+  }};
+
+
+function doCardsMatch() {
+  if (picked[0] === picked[1]) {
+    return true;
+  } else {
+    return false;
+  };
+};
+
+//if cards match, change their class to card match
+function onMatch() {
+  const openCards = document.querySelectorAll(".open");
+  for (card of openCards) {
+    card.classList = "match card";
+    matches++;
+}}
+
+
+// if cards do not match, remove the class "open" and add class "closed" to both
+function notMatch() {
+  setTimeout(function waitFirst() {
+    const openCards = document.querySelectorAll(".open");
+    for (card of openCards) {
+    card.classList.add("closed");
+    card.classList.remove("open");
+    //picked = [];
+  }},300);
+}
+
+//at the end of a move, increment the move counter and empty the picked array
+function endMove() {
+  moves++;
+  picked = [];
+};
+
+//when there are 16 matched cards, return true
+function isGameOver() {
+  if (matches === 16) {
+    return true;
+  } else {
+    return false;
+  }
+}
+
+//pop up the "You Win!" box
+function youWin() {
+  const winBox = document.createElement("div");
+  winBox.classList.add("win");
+  winBox.textContent = "You win!!";
+  deck.appendChild(winBox);
+}
+
+//if you make more than 40 moves, pop up the "You Lose" box
+function youLose() {
+  if (moves>40) {
+    deck.innerHTML = ""
+    const loseBox = document.createElement("div");
+    loseBox.classList.add("win");
+    loseBox.textContent = "You lose.";
+    deck.appendChild(loseBox);
+  }
+}
+
+</script>
+</body>
+</html>
