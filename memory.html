@@ -13,9 +13,6 @@
         <section class="score-panel">
             <span id="stars">Your Star Rating:</span>
             <ul class="stars starlist">
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
-              <li><i class="fa fa-star"></i></li>
             </ul>
 
             <div class="move-counter">
@@ -34,36 +31,57 @@
 
   <script>
 
-//First, let's put in all parts needed to initialize the deck
+//First, let's put in all parts needed to initialize the deck: board, cards,
+//icons and stars. 0 moves, 0 picked cards, 0 matches, and 0 time.
 const deck = document.createElement("div");
 const page = document.querySelector(".page");
 const icons = ["fa-bomb","fa-bomb", "fa-trophy", "fa-trophy", "fa-phone",
 "fa-phone", "fa-camera-retro", "fa-camera-retro", "fa-cloud", "fa-cloud",
 "fa-truck", "fa-truck", "fa-beer", "fa-beer", "fa-spinner", "fa-spinner"];
 let timeRunning;
+let moves;
+let picked;
+let matches;
+let starCounter;
 
-//Create the board space.
-deck.classList.add("board");
-//Add the board to the page.
-page.appendChild(deck);
-
-//Loop over the array to create the cards.
-const createCards = function() {
-  for (const icon of icons) {
-    const newCard = document.createElement("div");
-    newCard.classList.add("card", icon, "fa", "closed", "inGame");
-    deck.appendChild(newCard);
+//Game initializes by setting moves, picked, matches to none. Creates a board
+//and cards. Shuffles the cards. Puts 3 stars in the star rating div.
+function init() {
+  moves = 0;
+  picked = [];
+  matches = 0;
+  mover.innerText = "0";
+  //Create the board space.
+  deck.classList.add("board");
+  //Add the board to the page.
+  page.appendChild(deck);
+  //Loop over the array to create the cards.
+  const createCards = function() {
+    for (const icon of icons) {
+      const newCard = document.createElement("div");
+      newCard.classList.add("card", icon, "fa", "closed", "inGame");
+      deck.appendChild(newCard);
+    };
+  };
+  createCards();
+  //Shuffle the deck.
+  const shuffle = function() {
+    for (let i = deck.children.length; i >= 0; i--) {
+      deck.appendChild(deck.children[Math.random() * i | 0]);
+    }
+  };
+  shuffle();
+  const createStar = function() {
+    const starList = document.querySelector('ul');
+    const newStar = document.createElement('li');
+    newStar.classList = ("fa fa-star");
+    starList.append(newStar);
   }
-};
-//Shuffle the deck.
-const shuffle = function() {
-  for (let i = deck.children.length; i >= 0; i--) {
-    deck.appendChild(deck.children[Math.random() * i | 0]);
-   }
- };
-
-createCards();
-shuffle();
+  createStar();
+  createStar();
+  createStar();
+  starCounter = 3;
+}
 
 //Now, let's put in the components needed to run the game once, from beginning
 //to end.
@@ -71,11 +89,8 @@ shuffle();
 //hiding the cards, checking for matches and adding them to the match list, and
 //for decreasing stars. Finally, we need functionality for ending the game,
 //either because the player won or because they lost.
-let moves = 0;
 const mover = document.querySelector(".moves");
 const cards = document.querySelectorAll('.card');
-let picked = [];
-let matches = 0;
 const openCards = document.getElementsByClassName("open");
 let timer = document.querySelector('.timer');
 let seconds = 0;
@@ -109,7 +124,7 @@ function openCard(x) {
   }
 
 
-//check if 2 cards match.
+//check if 2 cards are open.
   function areTwoOpen() {
     if (picked.length === 2) {
       return true;
@@ -117,7 +132,7 @@ function openCard(x) {
       return false;
     }};
 
-
+//check if the 2 open cards match.
   function doCardsMatch() {
     if (picked[0] === picked[1]) {
       return true;
@@ -126,7 +141,7 @@ function openCard(x) {
     }
   }
 
-  //if cards match, change their class to card match
+//if cards match, change their class to card match
   function onMatch() {
     const openCards = document.querySelectorAll(".open");
     for (card of openCards) {
@@ -159,6 +174,7 @@ function openCard(x) {
     if (moves === 15 || moves === 20 || moves === 25) {
       const starToRemove = document.querySelector('li');
       starToRemove.parentNode.removeChild(starToRemove);
+      starCounter-=1;
     }
   }
 
@@ -166,7 +182,7 @@ function openCard(x) {
   function youWin() {
     const winBox = document.createElement("div");
     winBox.classList.add("win");
-    winBox.textContent = "You win!!";
+    winBox.innerHTML = "<div><header>You win!</header><p>YOUR STATS <br><br> Moves: " + mover.innerText + " <br> Star Rating: " + starCounter + "<br> Time: " + timer.innerText + "</p><button>Play<br>again?</button></div>";
     deck.appendChild(winBox);
   }
 
@@ -176,6 +192,10 @@ function youLose() {
     loseBox.classList.add("win");
     loseBox.textContent = "You lose.";
     deck.appendChild(loseBox);
+    let cards = document.querySelectorAll('.card');
+    for (card of cards) {
+      card.classList = ("")
+    }
 }
 
 function removeWin() {
@@ -185,18 +205,11 @@ function removeWin() {
   }
 }
 
-function gameOver() {
-    if (matches === 16) {
-      youWin();
-    } else {
-      youLose();
-    }
-    matches = 0;
-  }
+
 
 function runGame() {
 //put an event listener on each card
-deck.addEventListener('click', function(e) {
+deck.addEventListener('click', function gameFunctionality(e) {
   if (e.target.classList.contains('card', 'inGame')) {
     //start the timer if it's not running yet
     if(gameInProgress===false){
@@ -216,8 +229,18 @@ deck.addEventListener('click', function(e) {
       }
       endMove();
       if(matches === 16 || moves === 28) {
-        gameOver();
-        clearInterval(timeRunning);
+        function gameOver() {
+            if (matches === 16) {
+              youWin();
+            } else {
+              youLose();
+            }
+            matches = 0;
+            clearInterval(timeRunning);
+            gameInProgress = false;
+          };
+          gameOver();
+
       }
     };
 
@@ -225,24 +248,49 @@ deck.addEventListener('click', function(e) {
   });
 };
 
-runGame();
-function closeAllCards() {
-  for (card of cards) {
-    card.classList.remove('match');
-    card.classList.add('closed', 'fa');
+//To reset the game, we need to remove all the cards, reset the star ratings,
+//reset the moves to 0 and the picked array to empty and matches to 0, and
+//put the timer back at 0:00.
+function removeAllCards() {
+  let cards = document.querySelectorAll('.card');
+  for (x of cards) {
+  x.parentElement.removeChild(x);
+}
+}
+
+function removeAllStars() {
+  const stars = document.querySelectorAll('li');
+  for (star of stars) {
+    star.parentElement.removeChild(star);
+  };
+  starCounter = 0;
+};
+
+function resetTimer() {
+  clearInterval(timeRunning);
+  timer.innerText = '00:00';
+}
+
+function resetMoves() {
+  moves = 0;
+  mover.innerText = "0";
+}
+
+function removeModal() {
+  const modal = document.querySelector('.win');
+  if (modal !== null) {
+    modal.parentElement.removeChild(modal);
   }
 }
 
-function refresh() {
+function resetGame() {
+  removeAllCards();
+  removeAllStars();
+  resetTimer();
+  removeModal();
   picked = [];
-  mover.innerText = "0";
-  moves = 0;
-  clearInterval(timeRunning);
-  timer.innerText = "00:00"
-  closeAllCards();
-  removeWin();
-  shuffle();
 }
+
 /*
 
 
