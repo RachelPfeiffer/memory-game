@@ -1,12 +1,79 @@
 .board {
-  height: 500px;
   width: 500px;
+  max-width: 600px;
+  height: 500px;
+  max-height: 600px;
   display: flex;
   flex-wrap: wrap;
   margin: 0 auto;
-  position: relative;
+  margin-top: 9vw;
+  padding-top: 1vw;
+  align: center;
   background-image: url("images/board-background.jpeg");
   //https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiS07TqybfdAhXBDOwKHQpPCa0QjRx6BAgBEAU&url=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fblue%2520background%2F&psig=AOvVaw1x_0yvLGc5nn6mXpKnNCMT&ust=1536914234072541
+}
+
+body {
+  background-color: rgb(202, 247, 236);
+}
+
+
+.header {
+  width: 100%;
+  max-width: 600px;
+  height: 15vw;
+  max-height: 100px;
+
+  font-size: 1.5em;
+  background-color: navy;
+  color: cyan;
+  text-align: center;
+  margin: 0 auto;
+}
+
+#stars {
+  margin-left: 2vw;
+  display: block;
+  margin-top: 3.5vw;
+  font-size: 0.5em;
+  width: 35vw;
+}
+
+ul {
+  width: 20vw;
+  list-style-type: none;
+  display: block;
+  font-size: .5em;
+  margin-left: -8vw;
+}
+
+li{
+  float: left;
+  margin-top: 1vw;
+}
+
+.score-panel {
+  background-color: cyan;
+  font-size: 1em;
+  font-family: sans-sans-serif;
+  color: navy;
+  display: flex;
+  height: 8vw;
+  max-height: 100px;
+  min-height: 50px;
+  margin-top: -6vw;
+}
+
+.move-counter {
+  margin-left: 5vw;
+  margin-top: 3vw;
+  width: 40vw;
+  font-size: .7em;
+}
+
+button {
+  width: 45px;
+  height: 45px;
 }
 
 .board .card {
@@ -22,6 +89,7 @@
   font-size: 3em;
   color: 	rgb(0,139,139);
   opacity: 1;
+  box-shadow: 5px 5px rgba(15,15,15,0.3);
   background-image: url(images/open-background.jpg);
   //https://www.google.com/imgres?imgurl=https%3A%2F%2Fimages.all-free-download.com%2Fimages%2Fgraphicthumb%2Fvector_illustration_of_abstract_blue_swirl_background_570166.jpg&imgrefurl=https%3A%2F%2Fall-free-download.com%2Ffree-vector%2Fabstract-blue-yellow-background.html&docid=Nyr1phU9Z_WxRM&tbnid=Jx0lqh8dgcedbM%3A&vet=10ahUKEwifv8Xrz7fdAhUJBSwKHWbyDG0QMwjCASgAMAA..i&w=491&h=368&bih=613&biw=757&q=pale%20blue%20swirl%20background&ved=0ahUKEwifv8Xrz7fdAhUJBSwKHWbyDG0QMwjCASgAMAA&iact=mrc&uact=8
 }
@@ -38,7 +106,9 @@
   background-size: cover;
   //https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Breathe-face-smile.svg/220px-Breathe-face-smile.svg.png
 }
+.page {
 
+}
 .win {
   z-index: 10;
   position: absolute;
@@ -57,4 +127,10 @@
   text-align: center;
   line-height: 300px;
   vertical-align: middle;
+}
+
+.timer {
+  width: 100px;
+  font-size: 0.7em;
+  margin-top: 3vw;
 }
