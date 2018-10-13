@@ -23,11 +23,13 @@ shuffle();
 let isGameRunning = false;
 let timeRunning;
 let picked = [];
+let moves = 0;
 //2) Run matching functionality.
   //a. On click of card -
-  document.addEventListener('click', function matchingFunctionality(e) {
+document.addEventListener('click', function matchingFunctionality(e) {
     if (e.target.classList.contains("in-game")) {
   //b. If it's the first click:
+      console.log(e.target);
       if (isGameRunning === false) {
         //  i. start the timer.
         timeRunning = setInterval(countSeconds,1000);
@@ -42,28 +44,51 @@ let picked = [];
           displayTime();
         };
         //  ii. start counting the moves.
-        let moves = 0;
         mover = document.querySelector(".moves");
         mover.innerText = moves;
         //  iii. flip the "game in progress" switch.
-        gameInProgress = true;
+        isGameRunning = true;
       };
-
-  //c. Check if the card is already picked. If it's open, close it and remove from picked array. If it's closed, open it and add it to the picked array.
-  if (e.target.classList.contains("closed")) {
-    e.target.classList.add("open");
-    e.target.classList.remove("closed");
+  // If 2 cards are already open, do nothing.
+  if (picked.length === 2) {
+    null;
+    //Check if the card is already picked. If it's open, close it and remove from picked array. If it's closed, open it and add it to the picked array.
+} else if (e.target.classList.contains("closed")) {
     picked.push(e.target.classList.value);
+    console.log(picked);
+    e.target.classList.remove("closed");
   } else {
     e.target.classList.add("closed");
-    e.target.classList.remove("open");
     openCardIndex = picked.indexOf(e.target.classList.value);
     picked.splice(openCardIndex, 1);
+  };
+
+/*
+//  d. Check if another card is open. If it is,
+    //  i. STOP EVERYTHING FOR 1 SECOND SO PLAYER CAN SEE IF THERE'S A MATCH!
+    //  ii.  check if they match and add a move to the move counter and empty the picked array.
+if (picked.length === 2) {
+  setTimeout(ifTwoOpen(),800)
+  function ifTwoOpen() {
+  moves+=1;
+  checkMatch();
+  picked = [];
+};
+//  e. On match, add match and change classes to match and take off the event listener by removing the in-game class.
+function checkMatch() {
+  const openCards = document.querySelectorAll('.open');
+  if (picked[0] === picked[1]) {
+    matches+=1;
+    for (card of openCards) {
+      card.classList = ("card match");
+    }
+  } else {
+    //  f. On not match, add class closed and remove class open.
+      e.target.classList.add("closed");
+      e.target.classList.remove("open");
   }
-//  d. Check if another card is open. If it is, check if they match and add a move to the move counter.
-//  e. On match, add match and empty the picked array and change classes to match and take off the event listener.
-//  f. On not match, close both cards and empty the picked array and change classes to closed.
-}});
+};
+*/}});
 //3) end the game.
   //a. run modal - win for win and lose for lose. Ask player if they want to play again.
 //  b. make all cards nonfunctional.
