@@ -123,7 +123,7 @@ document.addEventListener('click', function matchingFunctionality(e) {
     }
 
     function updateStars() {
-      if (moves === 1 || moves === 2 || moves === 3) {
+      if (moves === 16 || moves === 22 || moves === 26) {
         const starToRemove = document.querySelector('li');
         starToRemove.parentNode.removeChild(starToRemove);
         starCounter-=1;
@@ -137,10 +137,10 @@ if (picked.length === 2) {
 }});
 //3) end the game.
 const isGameOver = function isGameOver() {
-if (matches === 1 || moves === 2) {
-  if (matches === 1) {
+if (matches === 8 || moves === 28) {
+  if (matches === 8) {
   youWin();
-} else if (moves === 2) {
+} else if (moves === 28) {
   youLose();
 };
 //stop the timer
