@@ -1,118 +1,134 @@
-.board {
-  width: 500px;
-  max-width: 600px;
-  height: 500px;
-  max-height: 600px;
-  display: flex;
-  flex-wrap: wrap;
-  margin: 0 auto;
-  margin-top: 9vw;
-  padding-top: 1vw;
-  align: center;
-  background-image: url("images/board-background.jpeg");
-  //https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiS07TqybfdAhXBDOwKHQpPCa0QjRx6BAgBEAU&url=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fblue%2520background%2F&psig=AOvVaw1x_0yvLGc5nn6mXpKnNCMT&ust=1536914234072541
-}
+html {
+  box-sizing: border-box;
+  }
+
+html, body {
+  width: 100%;
+  height: 100%;
+  margin: 0;
+  padding: 0;
+  }
 
 body {
   background-color: rgb(202, 247, 236);
-}
+  font-family: 'Coda', cursive;
+  }
 
-
-.header {
-  width: 100%;
-  max-width: 600px;
-  height: 15vw;
-  max-height: 100px;
-
-  font-size: 1.5em;
-  background-color: navy;
-  color: cyan;
-  text-align: center;
-  margin: 0 auto;
-}
-
-#stars {
-  margin-left: 2vw;
-  display: block;
-  margin-top: 3.5vw;
-  font-size: 0.5em;
-  width: 35vw;
-}
-
-ul {
-  width: 20vw;
-  list-style-type: none;
-  display: block;
-  font-size: .5em;
-  margin-left: -8vw;
-}
-
-li{
-  float: left;
-  margin-top: 1vw;
-}
-
-.score-panel {
-  background-color: cyan;
-  font-size: 1em;
-  font-family: sans-sans-serif;
-  color: navy;
+.container {
   display: flex;
-  height: 8vw;
-  max-height: 100px;
-  min-height: 50px;
-  margin-top: -6vw;
+  justify-content: center;
+  align-items: center;
+  flex-direction: column;
+  }
+
+h1 {
+  font-family: 'Open Sans', sans-serif;
+  font-weight: 300;
 }
 
-.move-counter {
-  margin-left: 5vw;
-  margin-top: 3vw;
-  width: 40vw;
-  font-size: .7em;
-}
+/*Styles for the deck of cards*/
 
-button {
-  width: 50px;
-  height: 50px;
-}
-.modal-replay {
-  width: 60px;
+.board {
+  width: 600px;
+  min-height: 600px;
+  background-image: url("images/board-background.jpeg");
+  /*//https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwiS07TqybfdAhXBDOwKHQpPCa0QjRx6BAgBEAU&url=https%3A%2F%2Fwww.pexels.com%2Fsearch%2Fblue%2520background%2F&psig=AOvVaw1x_0yvLGc5nn6mXpKnNCMT&ust=1536914234072541*/
+  background-size: cover;
+  display: flex;
+  flex-wrap: wrap;
+  justify-content: space-between;
+  align-items: center;
+  margin: 0 0 3em;
 }
 
 .board .card {
+  height: 130px;
+  width: 20%;
+  background-image: url(images/open-background.jpg);
+  /*//https://www.google.com/imgres?imgurl=https%3A%2F%2Fimages.all-free-download.com%2Fimages%2Fgraphicthumb%2Fvector_illustration_of_abstract_blue_swirl_background_570166.jpg&imgrefurl=https%3A%2F%2Fall-free-download.com%2Ffree-vector%2Fabstract-blue-yellow-background.html&docid=Nyr1phU9Z_WxRM&tbnid=Jx0lqh8dgcedbM%3A&vet=10ahUKEwifv8Xrz7fdAhUJBSwKHWbyDG0QMwjCASgAMAA..i&w=491&h=368&bih=613&biw=757&q=pale%20blue%20swirl%20background&ved=0ahUKEwifv8Xrz7fdAhUJBSwKHWbyDG0QMwjCASgAMAA&iact=mrc&uact=8*/
+  background-size: cover;
   border: 3px solid black;
   border-radius: 6px;
-  width: 21%;
-  height: 21%;
-  margin: 0 auto;
-  text-align: center;
+  cursor: pointer;
+  opacity: 1;
   display: flex;
   justify-content: center;
   align-items: center;
   font-size: 3em;
   color: 	rgb(0,139,139);
-  opacity: 1;
   box-shadow: 5px 5px rgba(15,15,15,0.3);
-  background-image: url(images/open-background.jpg);
-  //https://www.google.com/imgres?imgurl=https%3A%2F%2Fimages.all-free-download.com%2Fimages%2Fgraphicthumb%2Fvector_illustration_of_abstract_blue_swirl_background_570166.jpg&imgrefurl=https%3A%2F%2Fall-free-download.com%2Ffree-vector%2Fabstract-blue-yellow-background.html&docid=Nyr1phU9Z_WxRM&tbnid=Jx0lqh8dgcedbM%3A&vet=10ahUKEwifv8Xrz7fdAhUJBSwKHWbyDG0QMwjCASgAMAA..i&w=491&h=368&bih=613&biw=757&q=pale%20blue%20swirl%20background&ved=0ahUKEwifv8Xrz7fdAhUJBSwKHWbyDG0QMwjCASgAMAA&iact=mrc&uact=8
-}
-
-.closed.card {
-  background-image: url(images/card-background.jpg);
-  //https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjuir3Oy7fdAhVOsqQKHaVxCfUQjRx6BAgBEAU&url=https%3A%2F%2Fwww.vectorstock.com%2Froyalty-free-vector%2Fdark-glow-blue-swirl-background-vector-3928329&psig=AOvVaw3CQEDLOKOI8d8emgY3pPTA&ust=1536914712466468
-  background-size: cover;
-  color: rgba(3,3,3,0);
+  margin: 2% 2%;
 }
 
 .match.card {
   background-image: url(images/smiley.png);
   background-size: cover;
-  //https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Breathe-face-smile.svg/220px-Breathe-face-smile.svg.png
-
+  /*//https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Breathe-face-smile.svg/220px-Breathe-face-smile.svg.png
+  */cursor: default;
 }
-.page {
 
+.closed.card {
+  background-image: url(images/card-background.jpg);
+  /*//https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjuir3Oy7fdAhVOsqQKHaVxCfUQjRx6BAgBEAU&url=https%3A%2F%2Fwww.vectorstock.com%2Froyalty-free-vector%2Fdark-glow-blue-swirl-background-vector-3928329&psig=AOvVaw3CQEDLOKOI8d8emgY3pPTA&ust=1536914712466468
+  background-size: cover;*/
+  color: rgba(3,3,3,0);
 }
+/*Styles for the Score Panel*/
+.header {
+  width: 100%;
+  background-color: navy;
+  color: cyan;
+  text-align: center;
+}
+
+#stars {
+  margin: 0;
+  padding: 0;
+  display: block;
+  margin-top: 2.5%;
+  text-align: right;
+  width: 25%;
+}
+
+ul {
+  list-syle-type: none;
+  display: inline-block;
+  text-align: left;
+  margin-left: -5%;
+  margin-top: 2.2%;
+  width: 15%;
+}
+
+li {
+  display: inline-block;
+}
+
+.score-panel {
+  background-color: cyan;
+  color: navy;
+  margin-bottom: 10px;
+  text-align: center;
+  display: flex;
+}
+
+.move-counter {
+  width: 30%;
+  text-align: right;
+  margin-right: 20%;
+  margin-top: 2.5%;
+}
+
+button {
+  width: 50px;
+  height: 50px;
+  cursor: pointer;
+  display: inline-block;
+}
+
+.modal-replay {
+  width: 60px;
+}
+
 .win {
   z-index: 10;
   position: absolute;
@@ -130,18 +146,13 @@ button {
   margin-top: 80px;
 }
 
-header {
-  margin-top: 50px;
-  font-size: 4em;
-}
-
 p {
   font-size: 1em;
   margin-left: 10px;
   margin-right: 10px;
 }
+
 .timer {
-  width: 100px;
-  font-size: 0.7em;
-  margin-top: 3vw;
+  display: inline-block;
+  margin-top: 2.5%;
 }
