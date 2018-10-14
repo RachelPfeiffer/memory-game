@@ -48,7 +48,9 @@ let starList;
 //2) Run matching functionality.
   //a. On click of card -
 document.addEventListener('click', function matchingFunctionality(e) {
-    if (e.target.classList.contains("in-game")) {
+    if (e.target.classList.contains('button')) {
+      refresh();
+    } else if (e.target.classList.contains("in-game")) {
   //b. If it's the first click:
       if (isGameRunning === false) {
         //  i. start the timer.
@@ -183,6 +185,8 @@ function resetGame() {
   starCounter = 0;
   starList = document.querySelector('ul');
   starList.innerHTML = "";
+  isGameRunning = false;
+  clearInterval(timeRunning);
 }
 
 const refresh = function() {
