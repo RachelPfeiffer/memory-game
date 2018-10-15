@@ -81,7 +81,7 @@ h1 {
   text-align: center;
 }
 
-#stars {
+.stars {
   margin: 0;
   padding: 0;
   display: block;
