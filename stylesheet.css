@@ -60,11 +60,15 @@ h1 {
   margin: 2% 2%;
 }
 
+
+
 .match.card {
   background-image: url(images/smiley.png);
-  background-size: cover;
+  background-size: contain;
   /*//https://upload.wikimedia.org/wikipedia/commons/thumb/e/ea/Breathe-face-smile.svg/220px-Breathe-face-smile.svg.png
-  */cursor: default;
+  */
+  background-repeat: no-repeat;
+  cursor: default;
 }
 
 .closed.card {
