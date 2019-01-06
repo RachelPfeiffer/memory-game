@@ -137,6 +137,8 @@ const board = document.querySelector('.board');
 const View = {
   init : function () {
     View.createCards();
+    let starList = document.querySelector('ul');
+    starList.innerHTML = '';
     View.createStars();
     View.shuffleCards();
     View.createTimer();
@@ -208,8 +210,7 @@ const View = {
 
   endGame : function () {
     board.innerHTML = '';
-    let starList = document.querySelector('ul');
-    starList.innerHTML = '';
+
   },
 
   lose : function () {
@@ -223,7 +224,8 @@ const View = {
     const loseBox = document.createElement('div');
     const gameTime = document.querySelector('.timer').innerText;
     const mover = document.querySelector('.moves').innerText;
-    loseBox.innerHTML = '<h1>You Win!</h1><div class="stats"><span>Your Stats:</span><br></br><span>Moves: '+mover+'</span><br></br><span>Stars: '+Model.stars+'</span><br></br><span>Time: '+ gameTime + '</span></div><button class="again">Play Again?</button>';
+    const stars = document.querySelectorAll('.fa-star').length;
+    loseBox.innerHTML = '<h1>You Win!</h1><div class="stats"><span>Your Stats:</span><br></br><span>Moves: '+mover+'</span><br></br><span>Stars: '+stars+'</span><br></br><span>Time: '+ gameTime + '</span></div><button class="again">Play Again?</button>';
     loseBox.className = "win";
     board.appendChild(loseBox);
   },
