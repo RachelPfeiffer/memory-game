@@ -1,206 +1,244 @@
-//1) initialize the game.
-function init() {
-  //a. Make a board section.
-  const page = document.querySelector('.page');
-  board = document.createElement('div');
-  board.classList.add('board');
-  page.appendChild(board);
-  //b. For each icon, make a card. Show cards closed.
-  const icons = ['fa-bomb','fa-bomb', 'fa-trophy',
-  'fa-trophy', 'fa-phone', 'fa-phone',
-  'fa-camera-retro', 'fa-camera-retro', 'fa-cloud',
-  'fa-cloud', 'fa-truck', 'fa-truck', 'fa-beer',
-  'fa-beer', 'fa-spinner', 'fa-spinner'];
+    let runTime = null;
+// A = Model: card names, number of matches, which cards are currently picked, how many stars, how much time since game started, if game is not started, in progress, won, or lost
 
-  for (icon of icons) {
-    const newCard = document.createElement('div');
-    newCard.classList.add('card', 'fa', icon,
-    'closed', 'in-game');
-    board.appendChild(newCard);
-  };
+const Model = {
+  icons : ['fa-bomb', 'fa-trophy',
+   'fa-phone',
+  'fa-camera-retro',  'fa-cloud',
+   'fa-truck',  'fa-beer',
+   'fa-spinner'],
 
-  //c. Shuffle the cards.
-  function shuffle() {
-    for (let i = board.children.length; i >= 0; i--)
-    {
+  matches : 0,
+
+  picked : [],
+
+  stars : 3,
+
+  time: 0,
+
+  moves: 0,
+
+  status : "not started",
+
+  reset : function () {
+    this.matches = 0;
+    this.stars = 3;
+    this.time = 0;
+    this.moves = 0;
+    this.status = "not started";
+  }
+}
+
+const Controller = {
+  getCardPics : function () {
+    const cardsToCreate = [];
+    for (icon of Model.icons) {
+      cardsToCreate.push(icon);
+      cardsToCreate.push(icon);
+    };
+    return cardsToCreate;
+  },
+
+  getStars : function () {
+    return Model.stars;
+  },
+
+  getMoves : function () {
+    return Model.moves;
+  },
+
+  getPicked1 : function () {
+    return Model.picked[0];
+  },
+
+  getPicked2 :  function () {
+    return Model.picked[1];
+  },
+
+  updateStars : function () {
+    if (Model.moves === 13 || Model.moves === 18 || Model.moves === 23) {
+      Model.stars -= 1;
+      View.removeStar();
+    }
+  },
+
+  endMove : function () {
+    Model.moves +=1;
+    View.updateMoves();
+    Controller.updateStars();
+    if (Model.moves >= 25) {
+      Controller.endGame();
+      View.lose();
+    };
+    if (Model.matches >= 8) {
+      Controller.endGame();
+      View.win();
+    }
+  },
+
+  endGame : function () {
+    View.endGame();
+    Model.reset();
+    clearInterval(runTime);
+  },
+
+  onClick : function () {
+
+      document.addEventListener('click',  function (e) {
+        function countSeconds() {
+          Model.time += 1;
+          View.updateTime();
+        };
+        // when you click on a card
+        if (e.target.classList.contains('in')) {
+          // if it's the first click, start the timer.
+          if (Model.status === "not started") {
+              Model.status = "in progress";
+              runTime = setInterval(countSeconds, 1000);
+            }
+          // check if it's open or closed. if closed, open and add value to picked array. if open, close.
+          if (e.target.classList.contains('closed')) {
+            View.openCard(e);
+            Model.picked.push(e.target);
+            // now check if there are 2 cards in the picked array.
+            if (Model.picked.length === 2) {
+              let selectedCards = Model.picked;
+              Model.picked = [];
+              // if there are, check if they match
+              if (selectedCards[0].classList.value === selectedCards[1].classList.value) {
+                setTimeout(function () {
+                  View.onMatch(selectedCards);
+                },400)
+                Model.matches +=1;
+              } else {
+                setTimeout(function () {
+                  View.onNoMatch(selectedCards);
+                },400);
+              }
+            Controller.endMove();
+            }
+
+          } else {
+            // if only one card was open, close it and remove it from the picked array.
+            View.closeCard(e);
+            Model.picked.pop();
+          }
+        } else if (e.target.classList.contains('again') || e.target.classList.contains("reset")) {
+          Controller.endGame();
+          View.init();
+        }
+      })
+  }
+
+
+}
+const board = document.querySelector('.board');
+
+const View = {
+  init : function () {
+    View.createCards();
+    View.createStars();
+    View.shuffleCards();
+    View.createTimer();
+    View.createMoves();
+  },
+
+  createCards : function () {
+    for (icon of Controller.getCardPics()) {
+      const newCard = document.createElement('div');
+      newCard.classList = 'card in fa ' + icon + ' closed';
+      board.appendChild(newCard);
+    }
+  },
+
+  shuffleCards : function () {
+    for (let i = board.children.length; i >= 0; i--) {
       board.appendChild(board.children[Math.random()
       * i | 0]);
     }
-  };
-  shuffle();
+  },
 
-  //d. Add 3 stars to the star-list.
-  const starList = document.querySelector('.starlist');
-  function createStars() {
-    const newStar = document.createElement('li');
-    newStar.classList.add('fa', 'fa-star');
-    starList.appendChild(newStar);
-  };
-  createStars();
-  createStars();
-  createStars();
-  starCounter  = (document.querySelectorAll('li')).length;
-}
+  createStars :  function () {
+    const starsToCreate = Controller.getStars();
+    for (i = 0; i < starsToCreate; i++) {
+      const starList = document.querySelector('.starlist');
+      const newStar = document.createElement('li');
+      newStar.classList = 'fa fa-star';
+      starList.appendChild(newStar);
+  }
+},
 
-//necessary globals for the rest of the gqme:
-let isGameRunning = false;
-let board;
-let picked = [];
-let moves = 0;
-let mover;
-let matches = 0;
-let starCounter;
-let starList;
-let timer;
-let timeRunning;
+  createTimer : function () {
+    const timer = document.querySelector('.timer');
+    timer.innerText = '00:00';
+  },
 
-//2) Run matching functionality.
-//a. On click of card -
-document.addEventListener('click', function
-matchingFunctionality(e) {
-  //using 1 event listener to listen for all clicks -
-  //faster perf
-  if (e.target.classList.contains('button')) {
-    refresh();
-  } else if (e.target.classList.contains('in-game')) {
-  //b. If it's the first click:
-    if (isGameRunning === false) {
-      //  i. start the timer.
-      timeRunning = setInterval(countSeconds,1000);
-      let seconds = 0;
-      function countSeconds() {
-        seconds+=1;
-        function displayTime() {
-          timer = document.querySelector('.timer');
-          let formattedTime = ('0' + (Math.floor(seconds/60)).toString()).slice(-2) + ':' + ('0' + (seconds % 60).toString()).slice(-2);
-          timer.innerText = formattedTime;
-        };
-        displayTime();
-      };
-      //  ii. start counting the moves.
-      mover = document.querySelector('.moves');
-      mover.innerText = moves;
-      //  iii. flip the game in progress switch.
-      isGameRunning = true;
-    };
-  //c. If 2 cards are already open, do not allow to open any more cards.
-    const openCards = document.querySelectorAll('.open');
-    if (openCards.length === 2) {
-      null;
-    } else {
-    //d. otherwise, check if the card is already open.
-    if (e.target.classList.contains('open')) {
-      //i. if it's open, this is the second click on the same card and it needs to be closed and removed from picked array.
-      e.target.classList.add('closed');
-      e.target.classList.remove('open');
-      openCardIndex = picked.indexOf(e.target.classList.value);
-      picked.splice(openCardIndex, 1);
-    } else {
-      //ii. if it's closed, open the card and add to picked array.
-      e.target.classList.add('open');
-      e.target.classList.remove('closed');
-      picked.push(e.target.classList.value);
+  createMoves : function () {
+    const mover = document.querySelector('.moves');
+    mover.innerText = 0;
+  },
+
+  removeStar : function () {
+    const starToRemove = document.querySelector('li');
+    starToRemove.parentNode.removeChild(starToRemove);
+  },
+
+  openCard : function (e) {
+    e.target.classList.remove('closed');
+    e.target.classList.add('open');
+  },
+
+  closeCard : function (e) {
+    e.target.classList.add('closed');
+    e.target.classList.remove('open');
+  },
+
+  onMatch : function (e) {
+    for (card of e) {
+      card.classList = "card match";
     }
-  };
-  //We now have 2 open cards. Time to check for a match!
-  function checkMatch() {
-    if (picked[0] === picked[1]) {
-      const onMatch = function() {
-        const clickedCards = document.querySelectorAll('.open');
-        for (card of clickedCards) {
-          card.classList = ('card match');
-          console.log(card);
-        }
-        matches += 1;
-      };
-      onMatch();
-      endMove();
-      updateStars();
-    } else {
-      const notMatch = function() {
-        const clickedCards = document.querySelectorAll('.open');
-        for (card of clickedCards) {
-          card.classList.add('closed');
-          card.classList.remove('open');
-        }
-      };
-      notMatch();
-      endMove();
-      updateStars();
-    };
-    function endMove() {
-      picked = [];
-      moves += 1;
-      mover.innerText = moves;
-      isGameOver();
-    }
+  },
 
-    function updateStars() {
-      if (moves === 16 || moves === 22 || moves === 26) {
-        const starToRemove = document.querySelector('li');
-        starToRemove.parentNode.removeChild(starToRemove);
-        starCounter-=1;
-      };
-    };
-  };
-  if (picked.length === 2) {
-    setTimeout(checkMatch,600);
-  };
-}
-});
-//3) end the game.
-const isGameOver = function isGameOver() {
-  if (matches === 8 || moves === 28) {
-    if (matches === 8) {
-      youWin();
-    } else if (moves === 28) {
-      youLose();
-    };
-    //stop the timer
-    clearInterval(timeRunning);
-  };
-};
-//a. run modal - win for win and lose for lose. Ask player if they want to play again.
-  function youWin() {
-    const winBox = document.createElement('div');
-    winBox.classList.add('win');
-    winBox.innerHTML = '<div><header>You win!</header><p>YOUR STATS <br><br> Moves: ' + mover.innerText + ' <br> Star Rating: ' + starCounter + '<br> Time: ' + timer.innerText + '</p><button class="button">Play<br>again?</button></div>';
-    board.appendChild(winBox);
-  };
+  onNoMatch : function (e) {
+        for (card of e) {
+        card.classList.add('closed');
+        card.classList.remove('open');
+      }
+  },
 
-  function youLose() {
+  endGame : function () {
+    board.innerHTML = '';
+    let starList = document.querySelector('ul');
+    starList.innerHTML = '';
+  },
+
+  lose : function () {
     const loseBox = document.createElement('div');
-    loseBox.classList.add('win');
-    loseBox.innerHTML = '<span>You lose.</span><br><button class="button">Play<br>again?</button>';
+    loseBox.innerHTML = '<h1>Sorry, you lose.</h1><button class="again">Play Again?</button>';
+    loseBox.className = "win";
     board.appendChild(loseBox);
-    let cards = document.querySelectorAll('.card');
-    for (card of cards) {
-          card.classList = ('card closed');
-    }
+  },
+
+  win : function () {
+    const loseBox = document.createElement('div');
+    const gameTime = document.querySelector('.timer').innerText;
+    const mover = document.querySelector('.moves').innerText;
+    loseBox.innerHTML = '<h1>You Win!</h1><div class="stats"><span>Your Stats:</span><br></br><span>Moves: '+mover+'</span><br></br><span>Stars: '+Model.stars+'</span><br></br><span>Time: '+ gameTime + '</span></div><button class="again">Play Again?</button>';
+    loseBox.className = "win";
+    board.appendChild(loseBox);
+  },
+
+  updateTime : function () {
+    let timer = document.querySelector('.timer');
+    let formattedTime = ('0' + (Math.floor(Model.time/60)).toString()).slice(-2) + ':' + ('0' + (Model.time % 60).toString()).slice(-2);
+    timer.innerText = formattedTime;
+  },
+
+  updateMoves : function () {
+    const moveSection = document.querySelector('.moves');
+    moveSection.innerText = Model.moves;
   }
 
-//4) reset the game.
-//a. picked is 0. moves is 0. matches is 0. timer is 0. remove the board.
-function resetGame() {
-  picked = [];
-  moves = 0;
-  mover = document.querySelector('.moves');
-  mover.innerText = '';
-  seconds = 0;
-  timer = document.querySelector('.timer');
-  timer.innerText = '00:00';
-  matches = 0;
-  board.parentElement.removeChild(board);
-  starCounter = 0;
-  starList = document.querySelector('ul');
-  starList.innerHTML = "";
-  isGameRunning = false;
-  clearInterval(timeRunning);
 }
-
-const refresh = function() {
-  resetGame();
-  init();
-}
-
-init();
+View.init();
+Controller.onClick();
