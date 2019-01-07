@@ -31,4 +31,10 @@ Thanks also to the folks at GoogleAPIs- game makes use of Google Fonts.
 
   /*//https://www.google.com/url?sa=i&rct=j&q=&esrc=s&source=images&cd=&cad=rja&uact=8&ved=2ahUKEwjuir3Oy7fdAhVOsqQKHaVxCfUQjRx6BAgBEAU&url=https%3A%2F%2Fwww.vectorstock.com%2Froyalty-free-vector%2Fdark-glow-blue-swirl-background-vector-3928329&psig=AOvVaw3CQEDLOKOI8d8emgY3pPTA&ust=1536914712466468
 
+## Audio Credits
+From SoundBible.com:
+Click - Sebastian
+Bell - Daniel Simion
+Applause - Yannick Lemieux
+Music - Alexander Blu
 
