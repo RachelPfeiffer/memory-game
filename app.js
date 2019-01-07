@@ -100,10 +100,13 @@ const Controller = {
         };
         // when you click on a card
         if (e.target.classList.contains('in')) {
+
           const click = new Controller.sound("sounds/click.mp3");
           click.play();
           // if it's the first click, start the timer.
           if (Model.status === "not started") {
+            const backgroundMusic = new Controller.sound('sounds/music.mp3');
+            backgroundMusic.play();
               Model.status = "in progress";
               runTime = setInterval(countSeconds, 1000);
             }
@@ -241,6 +244,8 @@ const View = {
     loseBox.innerHTML = '<h1>You Win!</h1><div class="stats"><span>Your Stats:</span><br></br><span>Moves: '+mover+'</span><br></br><span>Stars: '+stars+'</span><br></br><span>Time: '+ gameTime + '</span></div><button class="again">Play Again?</button>';
     loseBox.className = "win";
     board.appendChild(loseBox);
+    const applause = new Controller.sound("sounds/applause.mp3");
+    applause.play();
   },
 
   updateTime : function () {
