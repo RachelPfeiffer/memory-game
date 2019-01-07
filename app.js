@@ -30,6 +30,15 @@ const Model = {
 }
 
 const Controller = {
+  sound : function (src) {
+    this.sound = document.createElement("audio");
+    this.sound.src = src;
+    this.sound.style.display = "none";
+    this.play = function() {
+   this.sound.play();
+ };
+},
+
   getCardPics : function () {
     const cardsToCreate = [];
     for (icon of Model.icons) {
@@ -91,9 +100,13 @@ const Controller = {
         };
         // when you click on a card
         if (e.target.classList.contains('in')) {
+          const click = new Controller.sound("sounds/click.mp3");
+          click.play();
           // if it's the first click, start the timer.
           if (Model.status === "not started") {
               Model.status = "in progress";
+              const backgroundMusic = new Controller.sound("sounds/music.mp3");
+              backgroundMusic.play();
               runTime = setInterval(countSeconds, 1000);
             }
           // check if it's open or closed. if closed, open and add value to picked array. if open, close.
@@ -106,6 +119,8 @@ const Controller = {
               Model.picked = [];
               // if there are, check if they match
               if (selectedCards[0].classList.value === selectedCards[1].classList.value) {
+                const matchNoise = new Controller.sound("sounds/bell.mp3");
+                matchNoise.play();
                 setTimeout(function () {
                   View.onMatch(selectedCards);
                 },400)
