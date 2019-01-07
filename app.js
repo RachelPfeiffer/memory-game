@@ -105,8 +105,6 @@ const Controller = {
           // if it's the first click, start the timer.
           if (Model.status === "not started") {
               Model.status = "in progress";
-              const backgroundMusic = new Controller.sound("sounds/music.mp3");
-              backgroundMusic.play();
               runTime = setInterval(countSeconds, 1000);
             }
           // check if it's open or closed. if closed, open and add value to picked array. if open, close.
