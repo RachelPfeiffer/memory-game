@@ -37,6 +37,10 @@ const Controller = {
     this.play = function() {
    this.sound.play();
  };
+ this.stop = function () {
+   this.sound.pause();
+   this.sound.currentTime = 0;
+ };
 },
 
   getCardPics : function () {
@@ -88,11 +92,11 @@ const Controller = {
   endGame : function () {
     View.endGame();
     Model.reset();
+
     clearInterval(runTime);
   },
 
   onClick : function () {
-
       document.addEventListener('click',  function (e) {
         function countSeconds() {
           Model.time += 1;
@@ -105,8 +109,7 @@ const Controller = {
           click.play();
           // if it's the first click, start the timer.
           if (Model.status === "not started") {
-            const backgroundMusic = new Controller.sound('sounds/music.mp3');
-            backgroundMusic.play();
+
               Model.status = "in progress";
               runTime = setInterval(countSeconds, 1000);
             }
